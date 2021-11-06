@@ -3,10 +3,17 @@
   "version": "1.0.0",
   "description": "Number compressor",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Wizi8914/number-compressor.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+    "number",
+    "compressor"
+  ],
   "author": "Wizi",
   "license": "ISC",
   "dependencies": {
