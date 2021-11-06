@@ -5,27 +5,27 @@ module.exports = {
 
 
 function compress(number) {
-    if (typeof(number) !== 'number') {
+    if (Number.isNaN(Number(number))) {
         return new Error('The parameter must be a number');
     }
-    if (number < 1000) {
-        return number;
+    if (Number(number) < 1000) {
+        return Number(number);
     }
     function compressstr(number, value, char) {
-        if (Number.isInteger(number / value) === true) {
-            return `${(number / value)}${char}`;
+        if (Number.isInteger(Number(number) / value) === true) {
+            return `${(Number(number) / value)}${char}`;
         } else {
-            return `${(number / value).toString().substring(0, (number / value).toString().length - (number / value).toString().split(/[.]/)[1].length + 1)}${char}`;
+            return `${(Number(number) / value).toString().substring(0, (Number(number) / value).toString().length - (Number(number) / value).toString().split(/[.]/)[1].length + 1)}${char}`;
         }
     }
-    if (number >= 1000 && number < 1000000) {
-        return compressstr(number, 1000, 'K')
-    } else if (number >= 1000000 && number < 1000000000) {
-        return compressstr(number, 1000000, 'M')
-    } else if (number >= 1000000000 && number < 1000000000000) {
+    if (Number(number) >= 1000 && Number(number) < 1000000) {
+        return compressstr(Number(number), 1000, 'K')
+    } else if (Number(number) >= 1000000 && Number(number) < 1000000000) {
+        return compressstr(Number(number), 1000000, 'M')
+    } else if (Number(number) >= 1000000000 && Number(number) < 1000000000000) {
         return compressstr(number, 1000000000, 'B')
-    } else if (number >= 1000000000000 && number < 1000000000000000) {
-        return compressstr(number, 1000000000000, 'T')
+    } else if (Number(number) >= 1000000000000 && Number(number) < 1000000000000000) {
+        return compressstr(Number(number), 1000000000000, 'T')
     }
 }
 
