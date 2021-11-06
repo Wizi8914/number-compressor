@@ -61,4 +61,4 @@ uncompress("T");
 // => return Error message
 ```
 ## Developers 👨‍💻
-- **[Wizi#3492](https://github.com/Wizi8914)**
+- **[WIZI#3492](https://github.com/Wizi8914)**
