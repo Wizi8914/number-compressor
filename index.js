@@ -6,7 +6,7 @@ module.exports = {
 
 function compress(number) {
     if (Number.isNaN(Number(number))) {
-        return new Error('The parameter must be a number');
+        throw new Error('The parameter must be a number');
     }
     if (Number(number) < 1000) {
         return Number(number);
@@ -26,6 +26,8 @@ function compress(number) {
         return compressstr(number, 1000000000, 'B')
     } else if (Number(number) >= 1000000000000 && Number(number) < 1000000000000000) {
         return compressstr(Number(number), 1000000000000, 'T')
+    } else {
+        throw new Error('The number is too large')
     }
 }
 
@@ -39,7 +41,7 @@ function uncompress(value) {
         }
         if (endwith('K', value) || endwith('M', value) || endwith('B', value) || endwith('T', value)) {
             if (Number.isNaN(Number(value.substring(0, (value.length - 1))))) {
-                return new Error('Invalide argument')
+                throw new Error('Invalide argument')
             } else {
                 if(value.substring(value.length - 1).toUpperCase() === 'K') {
                     return (value.substring(0, (value.length - 1)) * 1000)
@@ -52,7 +54,7 @@ function uncompress(value) {
                 }
             }
         } else {
-            return (new Error('Invalide argument'))
+            throw new Error('Invalide argument')
         }
     } else {
         return Number(value)
