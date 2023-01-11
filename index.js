@@ -50,15 +50,16 @@ function uncompress(value) {
             if (Number.isNaN(Number(value.substring(0, (value.length - 1))))) {
                 throw new Error('Invalide argument')
             } else {
-                if(value.substring(value.length - 1).toUpperCase() === 'K') {
-                    return (value.substring(0, (value.length - 1)) * 1000)
-                } else if (value.substring(value.length - 1).toUpperCase() === 'M') {
-                    return (value.substring(0, (value.length - 1)) * 1000000)
-                } else if (value.substring(value.length - 1).toUpperCase() === 'B') {
-                    return (value.substring(0, (value.length - 1)) * 1000000000)
-                } else if (value.substring(value.length - 1).toUpperCase() === 'T') {
-                    return (value.substring(0, (value.length - 1)) * 1000000000000)
-                }
+                let str = ''
+                let multiplier = 1
+                characters.forEach(character => {
+                    multiplier *= 1000
+                    if (value.substring(value.length - 1).toUpperCase() === character) {
+                        str = value.substring(0, (value.length - 1)) * multiplier
+                    }
+                });
+
+                return str
             }
         } else {
             throw new Error('Invalide argument')
@@ -68,4 +69,4 @@ function uncompress(value) {
     }
 }
 
-console.log(uncompress("100T"))
+console.log(uncompress("10k"))
