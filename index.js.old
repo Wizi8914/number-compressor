@@ -3,7 +3,7 @@ module.exports = {
     uncompress: uncompress
 };
 
-const characters = ['K', 'M', 'B', 'T', 'PP']
+const characters = ['K', 'M', 'B', 'T']
 
 function compress(number) {
     if (Number.isNaN(Number(number))) throw new Error('The parameter must be a number');
@@ -39,7 +39,7 @@ function uncompress(value) {
     if (Number.isNaN(Number(value))) {
         let EndsWith = (value) => {
             let _ = false;
-
+            
             _ = characters.some(element => {
                 return value.toUpperCase().endsWith(element);
             });
@@ -47,39 +47,20 @@ function uncompress(value) {
         };
 
         if (EndsWith(value)) {
-            let str = ''
-            let multiplier = 1
+            if (Number.isNaN(Number(value.substring(0, (value.length - 1))))) {
+                throw new Error('Invalide argument')
+            } else {
+                let str = ''
+                let multiplier = 1
+                characters.forEach(character => {
+                    multiplier *= 1000
+                    if (value.substring(value.length - 1).toUpperCase() === character) {
+                        str = value.substring(0, (value.length - 1)) * multiplier
+                    }
+                });
 
-            
-            /*
-            characters.sort((a, b) => {
-                return b.length - a.length; 
-            })
-            */
-
-            characters.forEach(character => {
-                multiplier *= 1000
-
-
-                //if (Number.isNaN(Number(value.substring(0, (value.length - character.length))))) { // TODO: FIX THIS
-
-
-                 //   throw new Error('Invalide argument')
-
-
-                if (value.substring(value.length - character.length).toUpperCase() === character) {
-
-                    console.log(character)
-                    console.log(character.length)
-                    console.log(value.substring(0, value.length - 2))
-                    str = value.substring(0, value.length - character.length) * multiplier
-                    
-                }
-            });
-                
-            return str
-
-            
+                return str
+            }
         } else {
             throw new Error('Invalide argument')
         }
@@ -88,4 +69,4 @@ function uncompress(value) {
     }
 }
 
-console.log(uncompress("10km"))
+console.log(uncompress("10k"))
