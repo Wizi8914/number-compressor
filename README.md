@@ -87,13 +87,12 @@ compress(1000000)
 compress(2243192, 3)
 // => return 2.243MP
 
+
+uncompress("1ko")
+// => return 1000000000
+
 uncompress("1D")
 // => return 1000000000000
-
-uncompress("1D")
-// => return 1000000000000000
-
-
 ```
 
 
