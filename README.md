@@ -33,7 +33,15 @@ compress(1000000000000);
 
 compress('test');
 // => return Error message
+```
+#### You can set the number of decimal
 
+```js
+compress(274287, 3)
+// => return 274.287K
+
+compress(274287, 0)
+// => return 274K
 ```
 #### Uncompress function:
 ```js
@@ -60,5 +68,34 @@ uncompress("1TT");
 uncompress("T");
 // => return Error message
 ```
+#### Define your own units
+```js
+
+const { compress, uncompress, setCustomUnit } = require("number-compressor");
+
+//You can define units of up to two characters
+const myUnits = ["P", "MP", "KO", "D"]
+
+setCustomUnit(myUnits)
+
+compress(1000)
+// => return 1P
+
+compress(1000000)
+// => return 1MP
+
+compress(2243192, 3)
+// => return 2.243MP
+
+uncompress("1D")
+// => return 1000000000000
+
+uncompress("1D")
+// => return 1000000000000000
+
+
+```
+
+
 ## Developers 👨‍💻
-- **[WIZI#3492](https://github.com/Wizi8914)**
+- **[WIZI](https://github.com/Wizi8914)**

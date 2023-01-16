@@ -1,19 +1,39 @@
 module.exports = {
     compress: compress,
-    uncompress: uncompress
+    uncompress: uncompress,
+    setCustomUnit: setCustomUnit
 };
 
-const characters = ['K', 'M', 'B', 'T', 'PP']
+let characters = ['K', 'M', 'B', 'T', 'QA', 'QI', 'SX', 'O', 'N'];
+let customUnit = false;
 
-function compress(number) {
+function setCustomUnit(array, logMessage = true) {
+    array.forEach(element => {
+        if (element.length > 2) throw new Error("Your units cannot exceed 2 characters")
+    });
+
+    if (logMessage) { console.log("NC: Your custom unit is successfully defined"); }
+
+    characters = array;
+    customUnit = true;
+}
+
+// This function compress the number by dividing it by the corresponding multiplier and add the unit
+function compress(number, decimal = 1) {
+    // Check if the input value is a number
     if (Number.isNaN(Number(number))) throw new Error('The parameter must be a number');
     if (Number(number) < 1000) return Number(number);
     
+    // This function is used to compress the number and return the compressed value with unit
     function compressStr(number, value, char) {
+        // Check if the number is an integer after dividing by the value
         if (Number.isInteger(Number(number) / value) === true) {
+            // If yes, return the compressed number with unit
             return `${(Number(number) / value)}${char}`;
         } else {
-            return `${(Number(number) / value).toString().substring(0, (Number(number) / value).toString().length - (Number(number) / value).toString().split(/[.]/)[1].length + 1)}${char}`;
+            // If not, return the compressed number rounded to 1 decimal with unit
+            let str = `${(Number(number) / value).toString().substring(0, (Number(number) / value).toString().length - (Number(number) / value).toString().split(/[.]/)[1].length + decimal)}`;
+            if (str.endsWith(".")) { return str.slice(0, -1)+char; } else { return str+char; }
         }
     }
     
@@ -21,71 +41,63 @@ function compress(number) {
     let multiplier = 1
     characters.forEach(character => {
         multiplier *= 1000
+        // Check if the current multiplier is less than the number and the next multiplier is greater than the number
         if (multiplier <= Number(number) && Number(number) < multiplier*1000) {
-            value = compressStr(Number(number), multiplier, character)
+            // Compress the number and store the value
+            value = compressStr(Number(number), multiplier, character);
         }
     });
 
     if(value != '') {
         return value;
     } else {
-        throw new Error('The number is too large');
+        if (customUnit) {
+            throw new Error('You have not defined a unit for this value');
+        } else {
+            throw new Error('The number is too large');
+        }
     }
 }
 
 //==================================== UNCOMPRESS FUNCTION ===============================================
 
 function uncompress(value) {
+    // Check if the input value is a number
     if (Number.isNaN(Number(value))) {
-        let EndsWith = (value) => {
-            let _ = false;
 
-            _ = characters.some(element => {
-                return value.toUpperCase().endsWith(element);
-            });
-            return _
-        };
+        // Extract the unit from the input value
+        const unit = value.substring(value.length - 2).toUpperCase().split('')[0]
 
-        if (EndsWith(value)) {
-            let str = ''
-            let multiplier = 1
+        // Create an array of numbers from 0 to 9 as strings
+        const number = Array.from({length: 10}, (_, i) => String(i));
 
-            
-            /*
-            characters.sort((a, b) => {
-                return b.length - a.length; 
-            })
-            */
+        // Check if the unit is a single digit number or two letters
+        const numberOfCharUnit = number.includes(unit) ? 1 : 2
 
-            characters.forEach(character => {
-                multiplier *= 1000
+        let str = '';
+        let multiplier = 1;
 
+        characters.forEach(character => {
+            multiplier *= 1000;
 
-                //if (Number.isNaN(Number(value.substring(0, (value.length - character.length))))) { // TODO: FIX THIS
+            // Check if the unit is present in the characters array
+            if (characters.includes(value.substring(value.length - numberOfCharUnit).toUpperCase())) {
+                if (value.substring(value.length - numberOfCharUnit).toUpperCase() === character) {
 
-
-                 //   throw new Error('Invalide argument')
-
-
-                if (value.substring(value.length - character.length).toUpperCase() === character) {
-
-                    console.log(character)
-                    console.log(character.length)
-                    console.log(value.substring(0, value.length - 2))
-                    str = value.substring(0, value.length - character.length) * multiplier
-                    
+                    // Multiply the value without the unit by the multiplier
+                    str = value.substring(0, (value.length - numberOfCharUnit)) * multiplier
                 }
-            });
-                
-            return str
-
-            
-        } else {
-            throw new Error('Invalide argument')
-        }
+            } else {
+                throw new Error('Invalide argument')
+            }
+        });
+        
+        return str
     } else {
         return Number(value)
     }
 }
 
-console.log(uncompress("10km"))
+setCustomUnit(["1", "22", "22"])
+
+console.log(compress(274287, 4))
