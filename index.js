@@ -97,7 +97,3 @@ function uncompress(value) {
         return Number(value)
     }
 }
-
-setCustomUnit(["1", "22", "22"])
-
-console.log(compress(274287, 4))
